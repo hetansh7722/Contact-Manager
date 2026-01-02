@@ -1,102 +1,107 @@
-/* GLOBAL STYLES */
+/* GLOBAL RESET */
+* { box-sizing: border-box; }
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #f0f2f5;
   margin: 0;
+  padding: 20px;
 }
 
-/* THE MAIN CARD */
-div {
-  background: white;
-  width: 100%;
-  max-width: 400px; /* Responsive width */
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Soft shadow */
-  transition: transform 0.3s ease; /* Smooth movement */
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-h1 {
+.app-title {
   text-align: center;
-  color: #2c3e50;
-  margin-bottom: 25px;
-  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
 }
 
-/* FORM INPUTS */
+/* MAIN LAYOUT: SIDE BY SIDE */
+.main-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start; /* Aligns tops of both boxes */
+}
+
+/* RESPONSIVE: Stack them on small screens */
+@media (max-width: 768px) {
+  .main-layout { flex-direction: column; }
+}
+
+/* WHITE BOXES STYLING */
+.form-section, .list-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  flex: 1; /* Makes them equal width */
+  width: 100%;
+}
+
+/* FORM ELEMENTS */
 form {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 30px;
 }
 
 input {
   padding: 12px;
-  border: 2px solid #eee;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   font-size: 16px;
-  transition: all 0.3s ease; /* Animates the border color */
 }
 
-input:focus {
-  outline: none;
-  border-color: #007bff; /* Blue glow on click */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-}
-
-/* THE BUTTON */
-button {
+.save-btn {
   padding: 12px;
-  background-color: #007bff;
+  background-color: #007bff; /* Blue */
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease; /* Smooth hover effect */
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  margin-top: 10px;
 }
 
-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px); /* Moves up slightly */
-  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-}
-
-button:active {
-  transform: translateY(0); /* Clicks down */
-}
+.save-btn:hover { background-color: #0056b3; }
 
 /* CONTACT LIST ITEMS */
-h3 {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  border-left: 5px solid #28a745; /* Green accent */
-  margin: 10px 0;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.scroll-list {
+  max-height: 500px; /* Scrolls if list gets too long */
+  overflow-y: auto;
+}
+
+.contact-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.card-info h3 { margin: 0 0 5px 0; color: #333; }
+.card-info p { margin: 2px 0; color: #666; font-size: 14px; }
+
+/* DELETE BUTTON (RED X) */
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Makes it a circle */
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.2s;
-  animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
 }
 
-h3:hover {
-  transform: scale(1.02); /* Slight zoom on hover */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Keyframes for the Fade In Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.delete-btn:hover {
+  background-color: #cc0000;
+  transform: scale(1.1);
 }
