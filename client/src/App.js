@@ -1,90 +1,173 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './App.css';
-
 
 const API_URL = 'https://contact-manager-5ug0.onrender.com/contacts';
 
 function App() {
   const [contacts, setContacts] = useState([]);
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [errors, setErrors] = useState({}); // Stores error messages
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1. Fetch Contacts
+  // Fetch contacts on load
   useEffect(() => {
-    axios.get(API_URL).then(res => setContacts(res.data));
+    fetchContacts();
   }, []);
 
-  // 2. Add Contact
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchContacts = async () => {
     try {
-      const res = await axios.post(API_URL, form);
-      setContacts([res.data, ...contacts]); // Add new contact to top
-      setForm({ name: '', email: '', phone: '' }); // Clear form
-    } catch (err) {
-      alert("Error adding contact");
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setContacts(data);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
     }
   };
 
-  // 3. Delete Contact 
-  const deleteContact = async (id) => {
+  // Real-time Validation Function
+  const validate = (name, value) => {
+    let errorMsg = '';
+    
+    if (name === 'name' && !value.trim()) {
+      errorMsg = 'Name is required';
+    }
+    if (name === 'phone' && !value.trim()) {
+      errorMsg = 'Phone is required';
+    }
+    if (name === 'email') {
+      if (!value.trim()) {
+        errorMsg = 'Email is required';
+      } else if (!/\S+@\S+\.\S+/.test(value)) {
+        errorMsg = 'Invalid email format';
+      }
+    }
+    return errorMsg;
+  };
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Validate immediately as user types
+    const error = validate(name, value);
+    setErrors({ ...errors, [name]: error });
+  };
+
+  // Check if form is valid (to enable/disable button)
+  const isFormValid = 
+    formData.name && 
+    formData.email && 
+    formData.phone && 
+    !errors.name && 
+    !errors.email && 
+    !errors.phone;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+
+    setIsSubmitting(true);
     try {
-      await axios.delete(`${API_URL}/${id}`);
-      setContacts(contacts.filter(c => c._id !== id));
-    } catch (err) {
-      alert("Error deleting contact");
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      setFormData({ name: '', email: '', phone: '', message: '' }); // Clear form
+      fetchContacts(); // Refresh list
+    } catch (error) {
+      console.error('Error adding contact:', error);
+    }
+    setIsSubmitting(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      fetchContacts();
+    } catch (error) {
+      console.error('Error deleting contact:', error);
     }
   };
 
   return (
-    <div className="app-container">
-      <h1 className="app-title">Contact Manager</h1>
+    <div className="App">
+      <h1>Contact Manager</h1>
       
-      <div className="main-layout">
-        {/* LEFT SIDE: FORM */}
-        <div className="form-section">
-          <h2>Add New Contact</h2>
+      <div className="container">
+        {/* Contact Form */}
+        <div className="form-card">
+          <h2>Add Contact</h2>
           <form onSubmit={handleSubmit}>
-            <input 
-              placeholder="Name" 
-              value={form.name} 
-              onChange={e => setForm({...form, name: e.target.value})} 
-              required 
+            <div className="form-group">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name *"
+                value={formData.name}
+                onChange={handleChange}
+              />
+              {errors.name && <span className="error">{errors.name}</span>}
+            </div>
+
+            <div className="form-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email *"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && <span className="error">{errors.email}</span>}
+            </div>
+
+            <div className="form-group">
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone *"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+              {errors.phone && <span className="error">{errors.phone}</span>}
+            </div>
+
+            <textarea
+              name="message"
+              placeholder="Message (Optional)"
+              value={formData.message}
+              onChange={handleChange}
             />
-            <input 
-              placeholder="Email" 
-              value={form.email} 
-              onChange={e => setForm({...form, email: e.target.value})} 
-              required 
-            />
-            <input 
-              placeholder="Phone" 
-              value={form.phone} 
-              onChange={e => setForm({...form, phone: e.target.value})} 
-              required 
-            />
-            <button type="submit" className="save-btn">Save Contact</button>
+
+            <button 
+              type="submit" 
+              disabled={!isFormValid || isSubmitting}
+              className={!isFormValid ? 'disabled-btn' : ''}
+            >
+              {isSubmitting ? 'Adding...' : 'Add Contact'}
+            </button>
           </form>
         </div>
 
-        {/* RIGHT SIDE: LIST */}
-        <div className="list-section">
-          <h2>Contacts Directory</h2>
-          <div className="scroll-list">
-            {contacts.map(c => (
-              <div key={c._id} className="contact-card">
-                <div className="card-info">
-                  <h3>{c.name}</h3>
-                  <p>{c.email}</p>
-                  <p>{c.phone}</p>
+        {/* Contact List */}
+        <div className="list-card">
+          <h2>Contacts</h2>
+          {contacts.length === 0 ? <p>No contacts found.</p> : (
+            <div className="contact-grid">
+              {contacts.map((contact) => (
+                <div key={contact._id} className="contact-item">
+                  <div className="contact-info">
+                    <h3>{contact.name}</h3>
+                    <p>{contact.email}</p>
+                    <p>{contact.phone}</p>
+                    {contact.message && <small>{contact.message}</small>}
+                  </div>
+                  <button className="delete-btn" onClick={() => handleDelete(contact._id)}>X</button>
                 </div>
-                {/* THE X BUTTON */}
-                <button onClick={() => deleteContact(c._id)} className="delete-btn">
-                  X
-                </button>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

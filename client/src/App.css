@@ -1,107 +1,188 @@
-/* GLOBAL RESET */
-* { box-sizing: border-box; }
+/* General Reset & Layout */
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
+  background-color: #f4f7f6;
   margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.App {
+  text-align: center;
   padding: 20px;
 }
 
-.app-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.app-title {
-  text-align: center;
-  color: #333;
+h1 {
+  color: #2c3e50;
   margin-bottom: 30px;
 }
 
-/* MAIN LAYOUT: SIDE BY SIDE */
-.main-layout {
+h2 {
+  color: #34495e;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
+/* Main Container - Responsive Layout */
+.container {
   display: flex;
-  gap: 30px;
-  align-items: flex-start; /* Aligns tops of both boxes */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-  .main-layout { flex-direction: column; }
-}
-
-/* WHITE BOXES STYLING */
-.form-section, .list-section {
+/* Cards (Form and List) */
+.form-card, .list-card {
   background: white;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  flex: 1; /* Makes them equal width */
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.form-card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  height: fit-content;
+}
+
+.list-card {
+  flex: 2;
+  min-width: 300px;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+input, textarea {
   width: 100%;
-}
-
-/* FORM ELEMENTS */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-input {
   padding: 12px;
+  margin-bottom: 5px; /* Space for error message */
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 16px;
+  transition: border 0.3s;
 }
 
-.save-btn {
+input:focus, textarea:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Button Styles */
+button {
+  width: 100%;
   padding: 12px;
-  background-color: #007bff; /* Blue */
+  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
-}
-
-.save-btn:hover { background-color: #0056b3; }
-
-/* CONTACT LIST ITEMS */
-.scroll-list {
-  max-height: 500px; /* Scrolls if list gets too long */
-  overflow-y: auto;
-}
-
-.contact-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  padding: 15px 0;
-}
-
-.card-info h3 { margin: 0 0 5px 0; color: #333; }
-.card-info p { margin: 2px 0; color: #666; font-size: 14px; }
-
-/* DELETE BUTTON (RED X) */
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%; /* Makes it a circle */
-  cursor: pointer;
+  transition: background 0.3s;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* VALIDATION STYLES (New) */
+button:disabled, .disabled-btn {
+  background-color: #bdc3c7 !important;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: -2px;
+}
+
+/* Contact List Grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.contact-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 15px;
+  border-radius: 8px;
+  position: relative;
   transition: transform 0.2s;
 }
 
+.contact-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.contact-info h3 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+}
+
+.contact-info p {
+  margin: 3px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.contact-info small {
+  display: block;
+  margin-top: 8px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Delete Button */
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background-color: #e74c3c;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+}
+
 .delete-btn:hover {
-  background-color: #cc0000;
-  transform: scale(1.1);
+  background-color: #c0392b;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-card, .list-card {
+    width: 100%;
+    max-width: 100%;
+  }
 }
