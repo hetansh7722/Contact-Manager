@@ -1,38 +1,102 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* GLOBAL STYLES */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin: 0;
+}
+
+/* THE MAIN CARD */
+div {
+  background: white;
+  width: 100%;
+  max-width: 400px; /* Responsive width */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Soft shadow */
+  transition: transform 0.3s ease; /* Smooth movement */
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* FORM INPUTS */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+input {
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease; /* Animates the border color */
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff; /* Blue glow on click */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* THE BUTTON */
+button {
+  padding: 12px;
+  background-color: #007bff;
   color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth hover effect */
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px); /* Moves up slightly */
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:active {
+  transform: translateY(0); /* Clicks down */
+}
+
+/* CONTACT LIST ITEMS */
+h3 {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #28a745; /* Green accent */
+  margin: 10px 0;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+  animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
+}
+
+h3:hover {
+  transform: scale(1.02); /* Slight zoom on hover */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Keyframes for the Fade In Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
