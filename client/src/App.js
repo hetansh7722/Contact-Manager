@@ -25,15 +25,26 @@ function App() {
   };
 
   // Real-time Validation Function
+  // Real-time Validation Function
   const validate = (name, value) => {
     let errorMsg = '';
     
     if (name === 'name' && !value.trim()) {
       errorMsg = 'Name is required';
     }
-    if (name === 'phone' && !value.trim()) {
-      errorMsg = 'Phone is required';
+
+    if (name === 'phone') {
+      if (!value.trim()) {
+        errorMsg = 'Phone is required';
+      } else if (!/^\d+$/.test(value)) { 
+        // ^ means start, \d+ means numbers only, $ means end
+        errorMsg = 'Phone must contain only numbers';
+      } else if (value.length < 10) {
+        // Optional: Ensure it's a realistic length (standard is usually 10)
+        errorMsg = 'Phone must be at least 10 digits';
+      }
     }
+
     if (name === 'email') {
       if (!value.trim()) {
         errorMsg = 'Email is required';
@@ -43,7 +54,6 @@ function App() {
     }
     return errorMsg;
   };
-
   // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
